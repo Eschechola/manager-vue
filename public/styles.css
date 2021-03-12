@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+*{
+    margin: 0;
+    border: 0;
+    padding: 0;
+    font-family: Ubuntu;
+}
+
+:root{
+    --background-white: #F8F9FD;
+    --purple: #844A87;
+    --purple-hover: #462647;
+    --light-gray: #F2F2F2;
+    --white: white;
+}
+
+body{
+    background: var(--background-white);
+}
+
+.text-align-left{
+    text-align: left;
+}
+
+.text-align-right{
+    text-align: right;
+}

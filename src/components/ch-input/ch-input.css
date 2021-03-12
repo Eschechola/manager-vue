@@ -1,0 +1,13 @@
+input{
+    border: none;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    background-color: var(--light-gray);
+    color: var(--purple);
+    outline: 0;
+    margin-top: 20px;
+    width: 80%;
+    border-radius: 5px;;
+    font-size: 1rem;
+}
