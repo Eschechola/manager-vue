@@ -14,6 +14,8 @@ import CreateProduct from '../pages/product/create-product/create-product';
 import UpdateProduct from '../pages/product/update-product/update-product';
 import SearchProducts from '../pages/product/search-products/search-products';
 
+import ForgotPassword from '../pages/auth/forgot-password/forgot-password';
+
 Vue.use(Router);
 Vue.use(VueMeta)
 
@@ -23,6 +25,12 @@ const routes = [
         path: '/', 
         name: "Login", 
         component: Login
+    },
+
+    {
+        path: '/forgot-password',
+        name: 'ForgotPassword',
+        component: ForgotPassword
     },
     
     { 
