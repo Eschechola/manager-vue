@@ -1,11 +1,11 @@
-const database = require('../database/connection');
+const database = require('../database/Connection');
 
 class CustomerRepository{
     async create(name, email, password){
          var customerId = await database.insert(
             {
-                "customer_name": name,
-                "customer_email": email,
+                "customer_name": name.toUpperCase(),
+                "customer_email": email.toLowerCase(),
                 "customer_password": password
             }
         ) 
@@ -15,10 +15,13 @@ class CustomerRepository{
     }
 
     async getById(id){
-        var customer = await database.where('id', id)
+        return await database.where('id', id)
                         .table("customer");
+    }
 
-        return customer[0];
+    async getByEmail(email){
+        return await database.where('customer_email', email.toLowerCase())
+                        .table("customer");
     }
 }
 
