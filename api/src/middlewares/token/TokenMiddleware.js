@@ -15,17 +15,26 @@ class TokenMiddleware{
     }
 
     verifyToken(req, res, next){
-        const token = req.headers['authorization'].split(' ')[1];
+        var token = req.headers['authorization'] || req.headers['Authorization'];
         
         if (!token)
-            return res.status(401).json({ auth: false, message: 'No token provided.' });
+            res.status(401).send({
+                message: "Token not found.",
+                success: false,
+                data: null
+            });
         
+        // removes "Bearer" word and mantains only token
+        token = token.split(' ')[1];
+
         jwt.verify(token, process.env.TOKEN_SECRET, function(err, decoded) {
-            if (err){
-                return res.status(500).json({ auth: false, message: 'Failed to authenticate token.' });
-            }
-            
-            req.id = decoded.id;
+            if (err)
+                res.status(401).send({
+                    message: "Token is invalid or expired.",
+                    success: false,
+                    data: null
+                });
+                
             next();
         });   
     }

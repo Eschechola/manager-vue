@@ -1,7 +1,7 @@
 const CustomerAlreadyExistsException = require('../utilities/exceptions/CustomerAlreadyExistsException');
 
 const _customerService = require('../services/CustomerService');
-const _tokenMiddleware = require('../../middlewares/token/TokenMiddleware');
+const _tokenMiddleware = require('../middlewares/token/TokenMiddleware');
 
 class CustomerController {
     async me(request, response){
