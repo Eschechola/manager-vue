@@ -25,8 +25,8 @@
                     </p>
                 </div>
             </div>
-
-            <ch-button class="login-button">SIGN IN</ch-button>
+            
+            <ch-button v-on:click.native="say('tudo bem pode ir')" class="login-button">SIGN IN</ch-button>
         </main>
     </section>
 </template>
@@ -46,5 +46,10 @@ export default {
     metaInfo: {
         title: 'Login - CHManager',
     },
+    methods:{
+        say: function(){
+            alert("Oh mani padme hum");
+        }
+    }
 }
 </script>
