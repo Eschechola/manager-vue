@@ -16,7 +16,7 @@ class TokenMiddleware{
 
     verifyToken(req, res, next){
         var token = req.headers['authorization'] || req.headers['Authorization'];
-        
+
         if (!token)
             res.status(401).send({
                 message: "Token not found.",

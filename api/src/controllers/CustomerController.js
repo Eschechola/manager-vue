@@ -49,6 +49,7 @@ class CustomerController {
             
         }
         catch(e){
+            console.log(e);
             response.status(500).send({
                 message: "An internal server error has been thrown, please try again",
                 success: false,

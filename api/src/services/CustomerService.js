@@ -5,7 +5,7 @@ class CustomerService{
     async login(email, password){
         const customer = await _customerRepository.getByEmail(email);
         
-        if(customer == undefined)
+        if(customer.length == 0)
             return;
 
         if(password != customer[0].customer_password)

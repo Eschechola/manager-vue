@@ -1,10 +1,10 @@
 const database = require('../database/Connection');
 
 class ProductRepository{
-    async create(userId, name, description, quantity, price){
+    async create(customerId, name, description, quantity, price){
         var productId = await database.insert(
             {
-                "userId": userId,
+                "customerId": customerId,
                 "product_name": name.toUpperCase(),
                 "product_description": description,
                 "product_quantity": quantity,
@@ -22,8 +22,8 @@ class ProductRepository{
     }
 
     async searchByName(name){
-        var products = await database.whereRaw('LOWER(product_name) like \'%??%\'', [name.toLowerCase()])
-                            .table("product");
+        var products = await database
+            .raw('SELECT * FROM product WHERE product_name LIKE ?', ['%'+name+'%']);
 
         return products;
     }
