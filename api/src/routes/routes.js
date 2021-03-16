@@ -25,7 +25,7 @@ router.get('/api/v1/products/search-by-name', ProductController.searchByName);
 router.use('/api/v1/products/delete/:id', TokenMiddleware.verifyToken);
 router.delete('/api/v1/products/delete/:id', ProductController.delete);
 
-// router.use('/api/v1/products/update', TokenMiddleware.verifyToken);
-// router.patch('/api/v1/products/update', ProductController.update);
+router.use('/api/v1/products/update', TokenMiddleware.verifyToken);
+router.patch('/api/v1/products/update', ProductController.update);
 
 module.exports = router;

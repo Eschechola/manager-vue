@@ -119,6 +119,42 @@ class ProductController{
                 });
         }
     }
+
+    async update(request, response){
+        try{
+            const customerId = _tokenMiddleware.getCustomerAuthenticatedData(request).id;
+            const { id, name, description, quantity, price } = request.body;
+
+            const product = await _productService.update(customerId, id, name, description, quantity, price);
+
+            response.json({
+                message: "Produto atualizado com sucesso!",
+                success: true,
+                data: product
+            });
+        }
+        catch(e){
+            console.log(e);
+            if (e instanceof ProductNotFoundException)
+                response.status(200).send({
+                    message: e.message,
+                    success: true,
+                    data: {}
+                });
+            else if(e instanceof AnotherCustomerProductException)
+                response.status(401).send({
+                    message: e.message,
+                    success: false,
+                    data: null
+                });
+            else
+                response.status(500).send({
+                    message: "An internal server error has been thrown, please try again",
+                    success: false,
+                    data: null
+                });
+        }
+    }
 }
 
 module.exports = new ProductController();
