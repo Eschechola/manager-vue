@@ -12,14 +12,13 @@ class ProductService{
     }
 
     async getbyId(customerId, productId){
-        const product = await _productRepository.getById(productId);
-
-        if(product.length == 0)
+        if(!await _productRepository.exists(productId))
             throw new ProductNotFoundException("The product not found.");
 
-        if(product[0].customerId != customerId)
-            throw new AnotherCustomerProductException("The product is another customer!")
+        if(!await _productRepository.verifyCustomerId(customerId))
+            throw new AnotherCustomerProductException("The product is another customer!");
 
+        const product = await _productRepository.getById(productId); 
         return product[0];
     }
 
@@ -35,24 +34,20 @@ class ProductService{
     }
 
     async delete(customerId, productId){
-        var product = await _productRepository.getById(productId);
-
-        if(product.length == 0)
+        if(!await _productRepository.exists(productId))
             throw new ProductNotFoundException("The product not found.");
         
-        if(product[0].customerId != customerId)
+        if(!await _productRepository.verifyCustomerId(customerId))
             throw new AnotherCustomerProductException("The product is another customer!")
         
         await _productRepository.delete(productId);
     }
 
     async update(customerId, productId, name, description, quantity, price){
-        const product = await _productRepository.getById(productId);
-
-        if(product.length == 0)
+        if(!await _productRepository.exists(productId))
             throw new ProductNotFoundException("The product not found.");
 
-        if(product[0].customerId != customerId)
+        if(!await _productRepository.verifyCustomerId(customerId))
             throw new AnotherCustomerProductException("The product is another customer!")
         
         await _productRepository.update(productId, name, description, quantity, price);

@@ -1,3 +1,4 @@
+const { getbyId } = require('../../services/ProductService');
 const database = require('../database/Connection');
 
 class ProductRepository{
@@ -14,24 +15,6 @@ class ProductRepository{
         .table("product");
 
         return productId[0];
-    }
-
-    async getById(id){
-        return await database.where('id', id)
-            .table("product");
-    }
-
-    async searchByName(name){
-        var products = await database
-            .raw('SELECT * FROM product WHERE product_name LIKE ?', ['%'+name+'%']);
-
-        return products;
-    }
-
-    async delete(productId){
-        await database.where('id', productId)
-                .table("product")
-                .del();
     }
 
     async update(productId, name, description, quantity, price){
@@ -52,6 +35,36 @@ class ProductRepository{
         await database.where('id', productId)
                     .update(fieldsToUpdate)
                     .table("product");
+    }
+
+    async delete(productId){
+        await database.where('id', productId)
+                .table("product")
+                .del();
+    }
+
+    async getById(id){
+        return await database.where('id', id)
+            .table("product");
+    }
+
+    async searchByName(name){
+        var products = await database
+            .raw('SELECT * FROM product WHERE product_name LIKE ?', ['%'+name+'%']);
+
+        return products;
+    }
+
+    async exists(id){
+        const product = await getbyId(id);
+
+        return product.length != 0;
+    }
+
+    async verifyCustomerId(customerId){
+        var product = await getbyId(id);
+        
+        return product[0].customerId == customerId;
     }
 }
 

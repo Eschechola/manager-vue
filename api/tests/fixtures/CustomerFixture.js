@@ -9,7 +9,7 @@ class CustomerFixture{
     } = {})
     {
         return{
-            "id" : id != null ? id: faker.datatype.uuid(),
+            "id" : id != null ? id : faker.datatype.uuid(),
             "customer_name" : name != null ? name : faker.name.findName(),
             "customer_email" : email != null ? email : faker.internet.email(),
             "customer_password" : password != null ? password: faker.internet.password()

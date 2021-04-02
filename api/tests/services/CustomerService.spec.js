@@ -93,6 +93,6 @@ describe("Create Tests", () => {
         };
         
         //Assert
-        expect(response).rejects.toEqual(CustomerAlreadyExistsException);
+        expect(response).rejects.toEqual(new CustomerAlreadyExistsException('Already exists a customer with this email!!'));
     });
 });
