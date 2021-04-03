@@ -17,7 +17,7 @@ class ProductService{
         if(!this.exists(product))
             throw new ProductNotFoundException("The product not found.");
 
-        if(!this.verifyCustomerId(customerId, product))
+        if(!this.verifyCustomer(customerId, product))
             throw new AnotherCustomerProductException("The product is another customer!");
 
         return product[0];
@@ -53,7 +53,7 @@ class ProductService{
         return product.length != 0;
     }
 
-    verifyCustomerId(customerId, product){
+    verifyCustomer(customerId, product){
         return product[0].customerId == customerId;
     }
 }
