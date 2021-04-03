@@ -54,18 +54,6 @@ class ProductRepository{
 
         return products;
     }
-
-    async exists(id){
-        const product = await getbyId(id);
-
-        return product.length != 0;
-    }
-
-    async verifyCustomerId(customerId){
-        var product = await getbyId(id);
-        
-        return product[0].customerId == customerId;
-    }
 }
 
 module.exports = new ProductRepository();
