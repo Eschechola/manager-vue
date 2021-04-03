@@ -2,17 +2,17 @@ const faker = require('faker');
 
 class CustomerFixture{
     generateNewCustomer({
-        id = null,
-        name = null, 
-        email = null,
-        password = null
+        id = faker.datatype.uuid(),
+        name = faker.name.findName(), 
+        email = faker.internet.email(),
+        password = faker.internet.password()
     } = {})
     {
         return{
-            "id" : id != null ? id : faker.datatype.uuid(),
-            "customer_name" : name != null ? name : faker.name.findName(),
-            "customer_email" : email != null ? email : faker.internet.email(),
-            "customer_password" : password != null ? password: faker.internet.password()
+            "id" : id,
+            "customer_name" : name,
+            "customer_email" : email,
+            "customer_password" : password
         }
     }
 }
