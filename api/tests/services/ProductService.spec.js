@@ -37,12 +37,6 @@ describe("Get By ID Tests", () => {
         //Arrange
         const getProduct = _productFixture.generateNewProduct();
 
-        await _productRepository.exists
-            .mockResolvedValue(true);
-
-        await _productRepository.verifyCustomerId
-            .mockResolvedValue(true);
-
         await _productRepository.getById
             .mockResolvedValue([getProduct]);
 
@@ -57,8 +51,8 @@ describe("Get By ID Tests", () => {
         //Arrange
         const getProduct = _productFixture.generateNewProduct();
 
-        await _productRepository.exists
-            .mockResolvedValue(false);
+        await _productRepository.getById
+            .mockResolvedValue([]);
 
         //Act
         const response = async () => {
@@ -73,13 +67,10 @@ describe("Get By ID Tests", () => {
         //Arrange
         const getProduct = _productFixture.generateNewProduct();
 
-        await _productRepository.exists
-            .mockResolvedValue(true);
+        await _productRepository.getById
+            .mockResolvedValue([getProduct]);
 
-        await _productRepository.verifyCustomerId
-            .mockResolvedValue(false);
-
-        const anotherUid = await faker.datatype.uuid;
+        const anotherUid = await faker.datatype.uuid();
 
         //Act
         const response = async () => {
@@ -94,30 +85,27 @@ describe("Get By ID Tests", () => {
 describe("Delete Tests", () => {
     it('Sucessful delete', async () => {
         //Arrange
-        const createdProduct = _productFixture.generateNewProduct();
+        const getProduct = _productFixture.generateNewProduct();
 
-        await _productRepository.exists
-            .mockResolvedValue(true);
-
-        await _productRepository.verifyCustomerId
-            .mockResolvedValue(true);
+        await _productRepository.getById
+            .mockResolvedValue([getProduct]);
 
         await _productRepository.delete
             .mockResolvedValue();
 
         //Act
-        await _productService.delete(createdProduct.customerId, createdProduct.id);
+        await _productService.delete(getProduct.customerId, getProduct.id);
 
         //Assert
-        expect(_productRepository.delete).toHaveBeenCalledWith(createdProduct.id);
+        expect(_productRepository.delete).toHaveBeenCalledWith(getProduct.id);
     });
 
     it('When product not exists throws a ProductNotFoundException', async () => {
         //Arrange
         const getProduct = _productFixture.generateNewProduct();
 
-        await _productRepository.exists
-            .mockResolvedValue(false);
+        await _productRepository.getById
+            .mockResolvedValue([]);
 
         //Act
         const response = async () => {
@@ -132,13 +120,10 @@ describe("Delete Tests", () => {
         //Arrange
         const getProduct = _productFixture.generateNewProduct();
 
-        await _productRepository.exists
-            .mockResolvedValue(true);
+        await _productRepository.getById
+            .mockResolvedValue([getProduct]);
 
-        await _productRepository.verifyCustomerId
-            .mockResolvedValue(false);
-
-        const anotherUid = await faker.datatype.uuid;
+        const anotherUid = await faker.datatype.uuid();
 
         //Act
         const response = async () => {
@@ -156,17 +141,12 @@ describe("Update Tests", () => {
         const createdProduct = _productFixture.generateNewProduct();
         const productUpdated = _productFixture.generateNewProduct({id: createdProduct.id});
 
-        await _productRepository.exists
-            .mockResolvedValue(true);
-
-        await _productRepository.verifyCustomerId
-            .mockResolvedValue(true);
-
         await _productRepository.getById
-            .mockResolvedValue([productUpdated]);
+            .mockReturnValueOnce([createdProduct])
+            .mockReturnValueOnce([productUpdated]);
 
         //Act
-        const response = await _productService.create(
+        const response = await _productService.update(
             createdProduct.customerId,
             createdProduct.name,
             createdProduct.description,
@@ -181,8 +161,8 @@ describe("Update Tests", () => {
         //Arrange
         const createdProduct = _productFixture.generateNewProduct();
 
-        await _productRepository.exists
-            .mockResolvedValue(false);
+        await _productRepository.getById
+            .mockResolvedValue([]);
 
         //Act
         const response = async () => {
@@ -202,13 +182,10 @@ describe("Update Tests", () => {
         //Arrange
         const createdProduct = _productFixture.generateNewProduct();
 
-        await _productRepository.exists
-            .mockResolvedValue(true);
+        await _productRepository.getById
+            .mockResolvedValue([createdProduct]);
 
-        await _productRepository.verifyCustomerId
-            .mockResolvedValue(false);
-
-        const anotherUid = await faker.datatype.uuid;
+        const anotherUid = await faker.datatype.uuid();
 
         //Act
         const response = async () => {
@@ -228,16 +205,10 @@ describe("Update Tests", () => {
 describe("Search By Name Tests", () => {
     it('Sucessful search returns a list of products', async () => {
         //Arrange
-        const customerId = faker.database.uuid;
-        console.log('caraio' + customerId);
+        const customerId = faker.datatype.uuid;
         const randomTerm = faker.lorem.word();
 
-        const productsList = [
-            await _productFixture.generateNewProduct(customerId),
-            await _productFixture.generateNewProduct(customerId),
-            await _productFixture.generateNewProduct(customerId),
-            await _productFixture.generateNewProduct(customerId)
-        ];
+        const productsList = _productFixture.generateNewProductList({items: 5, customerId: customerId});
 
         await _productRepository.searchByName
             .mockResolvedValue([productsList]);
@@ -251,16 +222,11 @@ describe("Search By Name Tests", () => {
 
     it('Sucessful search returns only customer products', async () => {
         //Arrange
-        const customerId = faker.database.uuid;
-        console.log('caraio' + customerId);
+        const customerId = faker.datatype.uuid;
         const randomTerm = faker.lorem.word();
 
-        const productsList = [
-            await _productFixture.generateNewProduct(customerId),
-            await _productFixture.generateNewProduct(customerId),
-            await _productFixture.generateNewProduct(customerId),
-            await _productFixture.generateNewProduct()
-        ];
+        const productsList = _productFixture.generateNewProductList({items: 3, customerId: customerId});
+        productsList.push(_productFixture.generateNewProduct({ customerId : "another_uuid" }));
 
         await _productRepository.searchByName
             .mockResolvedValue([productsList]);
