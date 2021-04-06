@@ -7,11 +7,11 @@
 
             <p class="login-modal-text">Have an account?</p>
 
-            <ch-input placeholder='Email'/>
+            <ch-input v-model="user.email" placeholder='Email'/>
 
             <br>
 
-            <ch-input placeholder='Password' type='password'/>
+            <ch-input v-model="user.password" placeholder='Password' type='password'/>
 
             <div class="login-modal-footer">
                 <div class="login-modal-footer-component">
@@ -25,7 +25,7 @@
                     </p>
                 </div>
             </div>
-            
+
             <ch-button v-on:click.native="say('tudo bem pode ir')" class="login-button">SIGN IN</ch-button>
         </main>
     </section>
@@ -45,6 +45,14 @@ export default {
     },
     metaInfo: {
         title: 'Login - CHManager',
+    },
+    data: function () {
+        return {
+            user: {
+                email: "",
+                password: ""
+            }
+        }
     },
     methods:{
         say: function(){
