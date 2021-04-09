@@ -6,10 +6,10 @@ class CustomerService{
         const customer = await _customerRepository.getByEmail(email);
         
         if(customer.length == 0)
-            return;
+            return null;
 
         if(password != customer[0].customer_password)
-            return;
+            return null;
 
         return customer[0];
     }

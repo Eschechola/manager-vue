@@ -29,7 +29,7 @@ class CustomerController {
 
             var customerLogin = await _customerService.login(email, password);
             
-            if(customerLogin != undefined)
+            if(customerLogin != null)
                 response.status(200).send({
                     message: "Login successful, Welcome again!",
                     success: true,
@@ -41,7 +41,7 @@ class CustomerController {
                     }
                 });
             else
-                response.status(500).send({
+                response.status(200).send({
                     message: "Email and/or password is invalid.",
                     success: false,
                     data: null
@@ -49,7 +49,6 @@ class CustomerController {
             
         }
         catch(e){
-            console.log(e);
             response.status(500).send({
                 message: "An internal server error has been thrown, please try again",
                 success: false,

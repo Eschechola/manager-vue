@@ -37,7 +37,7 @@
 import ChInput from '@/components/ch-input/ch-input';
 import ChButton from '@/components/ch-button/ch-button';
 
-const _customerService = require('../../../services/CustomerService');
+const axios = require('axios');
 const apiConfig = require('../../../config/ApiConfig');
 
 export default {
@@ -58,15 +58,28 @@ export default {
         }
     },
     methods:{
+        callAlert: function (message) {
+            alert(message);
+        },
+
         login : async function(){
+            var message = "";
+            const url = apiConfig.CUSTOMER_URL.LOGIN;
+            await axios.post(url, {
+                "email": this.user.email,
+                "password": this.user.password
+            })
+            .then(function (response) {
+                message = response.data.message;
+                if(response.data.success)
+                {
+                    localStorage.setItem("user", JSON.stringify(response.data.data));
+                    window.location.href = "/dashboard";
+                }
+            });
 
-            alert(this.user.email);
-            alert(this.user.password);
-            alert(apiConfig.CUSTOMER_URL.LOGIN);
-
-            const response = await _customerService.login(this.user.email, this.user.password);
-            alert(response);
-        }
+            this.callAlert(message)
+        },
     }
 }
 </script>

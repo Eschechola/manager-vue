@@ -1,5 +1,5 @@
 <template>
-  <h1>Dashboard</h1>
+  <h1>Olá, {{ user.name.capitalize() }}</h1>
 </template>
 
 <script>
@@ -8,5 +8,10 @@
         metaInfo: {
             title: 'Dashboard',
         },
+        data: function () {
+        return {
+            user: JSON.parse(localStorage.getItem("user"))
+        }
+    },
     }
 </script>

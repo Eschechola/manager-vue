@@ -15,6 +15,7 @@ import UpdateProduct from '../pages/product/update-product/update-product';
 import SearchProducts from '../pages/product/search-products/search-products';
 
 import ForgotPassword from '../pages/auth/forgot-password/forgot-password';
+import VueRouter from 'vue-router';
 
 Vue.use(Router);
 Vue.use(VueMeta)
@@ -80,6 +81,7 @@ const routes = [
     },
 ];
 
-export default new Router({
-    routes,
-  });
+export default new VueRouter({
+    mode: 'history',
+    routes
+})
