@@ -26,3 +26,33 @@ body{
 .text-align-right{
     text-align: right;
 }
+
+.loading-content{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+.loading{
+    flex:32px;
+    height: 32px;
+    border: 4px solid rgba(0, 0, 0, 0.2);
+    border-top: 4px solid rgba(0, 0, 0, 0.4);;
+    border-radius: 40px;
+    animation: LoadingRotate .6s infinite linear;
+}
+
+
+@keyframes LoadingRotate {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}

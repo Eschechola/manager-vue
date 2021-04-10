@@ -41,7 +41,7 @@ class CustomerController {
                     }
                 });
             else
-                response.status(200).send({
+                response.status(400).send({
                     message: "Email and/or password is invalid.",
                     success: false,
                     data: null

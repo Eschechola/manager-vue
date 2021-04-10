@@ -1,4 +1,4 @@
-class ApiConfig{
+class ApiRoutes{
     get BASE_URL(){
         return "http://localhost:4000/api/"
     }
@@ -19,4 +19,4 @@ class ApiConfig{
     }
 }
 
-module.exports = new ApiConfig();
+export default new ApiRoutes();

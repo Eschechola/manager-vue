@@ -7,26 +7,32 @@
 
             <p class="login-modal-text">Have an account?</p>
 
-            <ch-input v-model="user.email" placeholder='Email'/>
+            <form action="#">
+                <ch-input v-model="user.email" placeholder='Email'/>
 
-            <br>
+                <br>
 
-            <ch-input v-model="user.password" placeholder='Password' type='password'/>
+                <ch-input v-model="user.password" placeholder='Password' type='password'/>
 
-            <div class="login-modal-footer">
-                <div class="login-modal-footer-component">
-                    <p class="text-modal-footer text-align-left">
-                        <router-link to="/sign-up">Sign up</router-link>
-                    </p>
+                <div class="login-modal-footer">
+                    <div class="login-modal-footer-component">
+                        <p class="text-modal-footer text-align-left">
+                            <router-link to="/sign-up">Sign up</router-link>
+                        </p>
+                    </div>
+                    <div class="login-modal-footer-component">
+                        <p class="text-modal-footer text-align-right">
+                            <router-link to="/forgot-password">Forgot password</router-link>
+                        </p>
+                    </div>
                 </div>
-                <div class="login-modal-footer-component">
-                    <p class="text-modal-footer text-align-right">
-                        <router-link to="/forgot-password">Forgot password</router-link>
-                    </p>
+                
+                <div v-if="layout.isLoading == true" class="loading-content">
+                    <div class="loading"></div>
                 </div>
-            </div>
 
-            <ch-button v-on:click.native="login()" class="login-button">SIGN IN</ch-button>
+                <ch-button v-if="layout.isLoading == false" v-on:click.native="login()" class="login-button">SIGN IN</ch-button>
+            </form>
         </main>
     </section>
 </template>
@@ -37,8 +43,8 @@
 import ChInput from '@/components/ch-input/ch-input';
 import ChButton from '@/components/ch-button/ch-button';
 
-const axios = require('axios');
-const apiConfig = require('../../../config/ApiConfig');
+import _customerService from '../../../services/customerService';
+import _validator from '../../../functions/validators';
 
 export default {
     name: 'Login',
@@ -51,6 +57,11 @@ export default {
     },
     data: function () {
         return {
+            layout:{
+                isLoading: false,
+                emailFormErrors: [],
+                passwordFormErrors:[]
+            },
             user: {
                 email: "",
                 password: ""
@@ -58,27 +69,54 @@ export default {
         }
     },
     methods:{
-        callAlert: function (message) {
-            alert(message);
+        enableLoading: function(){
+            this.layout.isLoading = true;
+        },
+
+        disableLoading: function(){
+            this.layout.isLoading = false;
+        },
+
+        clearFields: function(){
+            this.user.email = "";
+            this.user.password = "";
+        },
+
+        validateForm: function(){
+            var isValid = true;
+
+            if(!_validator.validateEmail(this.user.email)){
+                this.$notification.error("Please, type a valid EMAIL", { infiniteTimer: false });
+                isValid = false;
+            }
+
+            if(!_validator.validateString(this.user.password)){
+                this.$notification.error("Please, type a valid PASSWORD", { infiniteTimer: false });
+                isValid = false;
+            }
+
+            return isValid;
         },
 
         login : async function(){
-            var message = "";
-            const url = apiConfig.CUSTOMER_URL.LOGIN;
-            await axios.post(url, {
-                "email": this.user.email,
-                "password": this.user.password
-            })
-            .then(function (response) {
-                message = response.data.message;
-                if(response.data.success)
-                {
-                    localStorage.setItem("user", JSON.stringify(response.data.data));
-                    window.location.href = "/dashboard";
-                }
-            });
+            this.enableLoading();
 
-            this.callAlert(message)
+            if(this.validateForm()){
+                try{
+                    const response = await _customerService.login(this.user.email, this.user.password);
+                    
+                    if(response.data.success)
+                    {
+                        localStorage.setItem("user", JSON.stringify(response.data.data));
+                        window.location.href = "/dashboard";
+                    }
+                }
+                catch(e){
+                    this.$notification.error(e.response.data.message);
+                }
+            }
+            
+            this.disableLoading();
         },
     }
 }
