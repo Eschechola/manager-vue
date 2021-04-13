@@ -9,9 +9,7 @@
 
             <form action="#">
                 <ch-input v-model="user.email" placeholder='Email'/>
-
-                <br>
-
+                
                 <ch-input v-model="user.password" placeholder='Password' type='password'/>
 
                 <div class="login-modal-footer">
@@ -83,19 +81,15 @@ export default {
         },
 
         validateForm: function(){
-            var isValid = true;
+            const errors = _validator.validateLoginForm(this.user.email, this.user.password);
 
-            if(!_validator.validateEmail(this.user.email)){
-                this.$notification.error("Please, type a valid EMAIL", { infiniteTimer: false });
-                isValid = false;
+            if(errors.length > 0){
+                for(var i = 0; i < errors.length; i++)
+                    this.$notification.error(errors[i]);
+                return false;
             }
 
-            if(!_validator.validateString(this.user.password)){
-                this.$notification.error("Please, type a valid PASSWORD", { infiniteTimer: false });
-                isValid = false;
-            }
-
-            return isValid;
+            return true;
         },
 
         login : async function(){

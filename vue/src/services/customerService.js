@@ -7,8 +7,22 @@ class CustomerService{
         const url = _apiRoutes.CUSTOMER_URL.LOGIN;
 
         const response = await _axios.post(url, {
-            "email": email,
-            "password": password
+            email: email,
+            password: password
+        });
+
+        return response;
+    }
+
+    async signup(name, email, password){
+        alert('poropopopopooo');
+
+        const url = _apiRoutes.CUSTOMER_URL.SIGNUP;
+
+        const response = await _axios.post(url, {
+            name: name,
+            email: email,
+            password: password
         });
 
         return response;

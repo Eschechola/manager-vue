@@ -76,7 +76,7 @@ class CustomerController {
         }
         catch(e){
             if (e instanceof CustomerAlreadyExistsException)
-                response.status(401).send({
+                response.status(400).send({
                     message: e.message,
                     success: false,
                     data: null
